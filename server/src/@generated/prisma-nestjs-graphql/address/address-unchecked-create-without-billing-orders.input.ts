@@ -1,0 +1,46 @@
+import { Field } from '@nestjs/graphql';
+import { InputType } from '@nestjs/graphql';
+import { OrderUncheckedCreateNestedManyWithoutShippingAddressInput } from '../order/order-unchecked-create-nested-many-without-shipping-address.input';
+
+@InputType()
+export class AddressUncheckedCreateWithoutBillingOrdersInput {
+
+    @Field(() => String, {nullable:true})
+    id?: string;
+
+    @Field(() => String, {nullable:false})
+    name!: string;
+
+    @Field(() => String, {nullable:false})
+    phone!: string;
+
+    @Field(() => String, {nullable:true})
+    gender?: string;
+
+    @Field(() => String, {nullable:false})
+    address!: string;
+
+    @Field(() => String, {nullable:false})
+    country!: string;
+
+    @Field(() => String, {nullable:false})
+    city!: string;
+
+    @Field(() => String, {nullable:false})
+    area!: string;
+
+    @Field(() => String, {nullable:false})
+    postal!: string;
+
+    @Field(() => String, {nullable:true})
+    userId?: string;
+
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+
+    @Field(() => Date, {nullable:true})
+    updatedAt?: Date | string;
+
+    @Field(() => OrderUncheckedCreateNestedManyWithoutShippingAddressInput, {nullable:true})
+    shippingOrders?: OrderUncheckedCreateNestedManyWithoutShippingAddressInput;
+}

@@ -1,0 +1,30 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Query {
+  hello: String!
+}
+
+type Mutation {
+  signup(data: SignupInput!): String!
+  login(data: LoginInput!): String!
+  verifyPhone(data: VerifyPhoneInput!): String!
+}
+
+input SignupInput {
+  phone: String!
+  name: String
+  email: String
+  password: String
+}
+
+input LoginInput {
+  phone: String!
+  password: String!
+}
+
+input VerifyPhoneInput {
+  phone: String!
+  otp: String!
+}

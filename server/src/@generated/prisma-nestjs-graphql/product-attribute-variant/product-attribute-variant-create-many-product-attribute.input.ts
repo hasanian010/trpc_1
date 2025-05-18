@@ -1,0 +1,22 @@
+import { Field } from '@nestjs/graphql';
+import { InputType } from '@nestjs/graphql';
+import { ProductAttributeVariantCreateselectedInput } from './product-attribute-variant-createselected.input';
+
+@InputType()
+export class ProductAttributeVariantCreateManyProductAttributeInput {
+
+    @Field(() => String, {nullable:true})
+    id?: string;
+
+    @Field(() => ProductAttributeVariantCreateselectedInput, {nullable:true})
+    selected?: ProductAttributeVariantCreateselectedInput;
+
+    @Field(() => String, {nullable:false})
+    productId!: string;
+
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+
+    @Field(() => Date, {nullable:true})
+    updatedAt?: Date | string;
+}
