@@ -1,43 +1,59 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from '@/prisma/prisma.service';
 
 @Injectable()
 export class CouponService {
-  constructor() {}
+  constructor(private readonly prisma: PrismaService) {}
 
-  // متدهای اصلی مطابق فایل متد
-  ructor() {
-    // TODO: پیاده‌سازی
+  async getByUser() {
+    return await this.prisma.couponUser.findMany();
   }
 
-  getByUser() {
-    // TODO: پیاده‌سازی
+  async getByAdmin() {
+    return await this.prisma.couponAdmin.findMany();
   }
 
-  getByAdmin() {
-    // TODO: پیاده‌سازی
+  async getSingleByAdmin(id: string) {
+    const coupon = await this.prisma.couponAdmin.findUnique({ where: { id } });
+    if (!coupon) {
+      throw new NotFoundException('Coupon not found');
+    }
+    return coupon;
   }
 
-  getSingleByAdmin() {
-    // TODO: پیاده‌سازی
+  async add(data: any) {
+    return await this.prisma.couponAdmin.create({ data });
   }
 
-  add() {
-    // TODO: پیاده‌سازی
+  async redeem(code: string) {
+    const coupon = await this.prisma.couponAdmin.findFirst({ where: { code } });
+    if (!coupon) {
+      throw new NotFoundException('Coupon code not found');
+    }
+    return coupon;
   }
 
-  redeem() {
-    // TODO: پیاده‌سازی
+  async update(id: string, data: any) {
+    const coupon = await this.prisma.couponAdmin.findUnique({ where: { id } });
+    if (!coupon) {
+      throw new NotFoundException('Coupon not found');
+    }
+    return await this.prisma.couponAdmin.update({ where: { id }, data });
   }
 
-  update() {
-    // TODO: پیاده‌سازی
+  async apply(code: string) {
+    const coupon = await this.prisma.couponAdmin.findFirst({ where: { code } });
+    if (!coupon) {
+      throw new NotFoundException('Coupon not available');
+    }
+    return coupon;
   }
 
-  apply() {
-    // TODO: پیاده‌سازی
-  }
-
-  delete() {
-    // TODO: پیاده‌سازی
+  async delete(id: string) {
+    const coupon = await this.prisma.couponAdmin.findUnique({ where: { id } });
+    if (!coupon) {
+      throw new NotFoundException('Coupon not found');
+    }
+    return await this.prisma.couponAdmin.delete({ where: { id } });
   }
 }

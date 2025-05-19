@@ -1,31 +1,53 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from '@/prisma/prisma.service';
 
 @Injectable()
 export class CartService {
-  constructor() {}
+  constructor(private readonly prisma: PrismaService) {}
 
-  // متدهای اصلی مطابق فایل متد
-  ructor() {
-    // TODO: پیاده‌سازی
+  async get() {
+    // دریافت همه آیتم‌های سبد خرید (بدون فیلتر userId)
+    return await this.prisma.orderProduct.findMany({
+      include: { product: true, variations: true },
+    });
   }
 
-  get() {
-    // TODO: پیاده‌سازی
+  async add(data: any) {
+    return await this.prisma.orderProduct.create({
+      data,
+    });
   }
 
-  add() {
-    // TODO: پیاده‌سازی
+  async increase(id: string) {
+    const item = await this.prisma.orderProduct.findUnique({ where: { id } });
+    if (!item) {
+      throw new NotFoundException('Cart item not found');
+    }
+    return await this.prisma.orderProduct.update({
+      where: { id },
+      data: { quantity: item.quantity + 1 },
+    });
   }
 
-  increase() {
-    // TODO: پیاده‌سازی
+  async decrease(id: string) {
+    const item = await this.prisma.orderProduct.findUnique({ where: { id } });
+    if (!item) {
+      throw new NotFoundException('Cart item not found');
+    }
+    if (item.quantity <= 1) {
+      return this.delete(id);
+    }
+    return await this.prisma.orderProduct.update({
+      where: { id },
+      data: { quantity: item.quantity - 1 },
+    });
   }
 
-  decrease() {
-    // TODO: پیاده‌سازی
-  }
-
-  delete() {
-    // TODO: پیاده‌سازی
+  async delete(id: string) {
+    const item = await this.prisma.orderProduct.findUnique({ where: { id } });
+    if (!item) {
+      throw new NotFoundException('Cart item not found');
+    }
+    return await this.prisma.orderProduct.delete({ where: { id } });
   }
 }
